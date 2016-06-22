@@ -31,5 +31,7 @@ module.exports = ({
         loaders: ['style', 'css', 'sass']
       }
     ]
-  }
+  },
+
+  devTool: 'source-map'
 })
