@@ -3,11 +3,12 @@
   "version": "0.0.1",
   "scripts": {
     "app": "webpack-dev-server --hot --inline",
-    "dev": "nodemon server.js",
+    "dev": "nodemon --exec babel-node -- server.js",
     "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
+    "babel-cli": "^6.10.1",
     "babel-core": "^6.9.1",
     "babel-eslint": "^6.0.4",
     "babel-loader": "^6.2.4",

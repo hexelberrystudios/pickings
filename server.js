@@ -20,10 +20,10 @@ const config = require('./config/default');
 const staticServe = require('koa-static');
 const sqlConfig = require('./sqlConfig');
 const flash = require('koa-flash');
-const knex = require('knex')(sqlConfig);
+//const knex = require('knex')(sqlConfig);
 const session = require('koa-generic-session');
 const cookieSession = require('koa-session');
-const MySqlStore = require('koa-mysql-session');
+//const MySqlStore = require('koa-mysql-session');
 
 // https://github.com/koajs/ejs
 render(app, {
@@ -49,6 +49,7 @@ app.keys = [config.session.secretKey];
 app.use(bodyParser());
 app.use(flash());
 app.use(cookieSession(app));
+/*
 app.use(session({
   store: new MySqlStore(sqlConfig.connection),
   rolling: true,
@@ -56,6 +57,7 @@ app.use(session({
     maxage: 86400000 // one day
   }
 }));
+*/
 routes(app);
 
 app.use(errorHandler());
