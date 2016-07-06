@@ -2,13 +2,14 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
 import koaRoute from 'koa-route';
-import routes from './routes';
+import routes from '../shared/routes';
 
 export default function (app) {
-  app.use(koaRoute.get('*', function *(next) {
+  app.use(koaRoute.get('/', function *(next) {
     let reactString;
 console.log(routes);
-    match({ routes: React.createFactory(routes), location: this.url }, (error, redirectLocation, props) => {
+console.log(this.path);
+    match({ routes: React.createFactory(routes), location: this.path }, (error, redirectLocation, props) => {
       console.log('props');
       console.log(props);
       if (error) {
@@ -22,7 +23,8 @@ console.log(routes);
         console.log(props);
         reactString = renderToString(RouterContext(props));
       } else {
-        this.throw('Not Found', 404);
+        console.log('NOT FOUND');
+        //this.throw('Not Found', 404);
       }
     });
 

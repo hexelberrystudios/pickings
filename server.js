@@ -52,4 +52,4 @@ app.use(session({
 router(app);
 errorHandler(app);
 app.use(staticServe('static', { gzip: true }));
-app.listen(3003);
+app.listen(3000);

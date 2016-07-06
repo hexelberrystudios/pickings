@@ -2,9 +2,10 @@
   "name": "recipe-app",
   "version": "0.0.1",
   "scripts": {
-    "app": "webpack-dev-server --hot --inline",
+    "app": "webpack-dev-server --hot --inline --history-api-fallback",
     "dev": "nodemon --exec babel-node -- server.js",
-    "start": "node server.js",
+    "start": "nodemon --exec babel-node -- server.js",
+    "prod": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {

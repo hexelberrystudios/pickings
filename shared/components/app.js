@@ -1,5 +1,5 @@
 import React from 'react';
-import { RouteHandler } from 'react-router';
+import { Link } from 'react-router';
 
 export default class AppComponent extends React.Component {
   render () {

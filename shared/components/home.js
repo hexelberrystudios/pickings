@@ -4,10 +4,10 @@ import { Link } from 'react-router';
 export default class HomeComponent extends React.Component {
   render () {
     <div>
-      <h2>Getting Started</h2>
+      <h1>Hexelberry Picking</h1>
       <ul>
-        <li><Link to='/'>Home</Link></li>
-        <li><Link to='/about'>About</Link></li>
+        <li><Link to='/table'>Set a Table</Link></li>
+        <li><Link to='/'>Browse Recipes</Link></li>
       </ul>
       { this.props.children }
     </div>
