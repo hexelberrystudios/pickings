@@ -6,7 +6,7 @@ import React from 'react';
 
 export default class PreferenceList extends React.Component {
   render () {
-    const {preferences, ...props} = this.props;
+    const { preferences } = this.props;
 
     return (
       <div>{preferences.map(function (preference) {

@@ -6,7 +6,7 @@ import React from 'react';
 
 export default class GuestList extends React.Component {
   render () {
-    const {guests, ...props} = this.props;
+    const { guests } = this.props;
 
     return (
       <ul>{guests.map(guest =>

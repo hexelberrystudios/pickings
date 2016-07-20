@@ -23,7 +23,8 @@ const preferences = [
 
 export default class Guest extends React.Component {
   render () {
-    const {guest, ...props} = this.props;
+    let { guest } = this.props;
+    guest = guest || {};
 
     return (
       <div>

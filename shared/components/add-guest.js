@@ -9,9 +9,9 @@ import Guest from './guest';
 
 export default class AddGuest extends React.Component {
   render () {
-    return (
-      const {tableId, ...props} = this.props;
+    const { tableId } = this.props;
 
+    return (
       <form action="/guest">
         <Guest/>
         <input type="hidden" name="tableId" value={tableId} />
