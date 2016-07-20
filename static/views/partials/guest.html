@@ -1,0 +1,13 @@
+<div>
+  <div>
+    <% if (typeof(guest) !== 'undefined') { %>
+      <input type="text" name="guestName" value="<%= guest.name %>"/>
+    <% } else { %>
+      <input type="text" name="guestName" />
+    <% } %>
+    <span>does not eat</span>
+    <% include preference-autocomplete.html %>
+    <button type="button">Add Preference</button>
+  </div>
+  <% include preference-list.html %>
+</div>

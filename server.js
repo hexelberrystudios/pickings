@@ -5,11 +5,10 @@ import render from 'koa-ejs';
 import bodyParser from 'koa-bodyparser';
 import staticServe from 'koa-static';
 import flash from 'koa-flash';
-//import session from 'koa-generic-session';
-//import cookieSession from 'koa-mysql-session';
-//import knex from 'knex';
-//import MySqlStore from 'koa-mysql-session';
-import sqlConfig from './sqlConfig';
+import session from 'koa-generic-session';
+import cookieSession from 'koa-session';
+import knex from 'knex';
+import MySqlStore from 'koa-mysql-session';
 import config from './config/default';
 import router from './app/router';
 import errorHandler from './app/errorHandler';
@@ -20,12 +19,14 @@ if (!process.env.SQL_HOST) {
   env = require('./env');
 }
 
+const sqlConfig = require('./sqlConfig');
+
 const app = module.exports = koa();
 
 // Setting up react requirements
 require('node-jsx').install({harmony: true, extension: 'jsx'});
 
-//const knexConnection = require('knex')(sqlConfig);
+const knexConnection = require('knex')(sqlConfig);
 
 // https://github.com/koajs/ejs
 render(app, {
@@ -38,17 +39,17 @@ render(app, {
 
 app.keys = [config.session.secretKey];
 app.use(bodyParser());
-//app.use(flash());
-//app.use(cookieSession(app));
-/*
+app.use(flash());
+app.use(cookieSession(app));
 app.use(session({
   store: new MySqlStore(sqlConfig.connection),
   rolling: true,
   cookie: {
-    maxage: 86400000 // one day
+    maxage: 86400000, // one day
+    secure: false, // set to true to only serve over https
+    signed: false // set to true to detect tampering
   }
 }));
-*/
 router(app);
 errorHandler(app);
 app.use(staticServe('static', { gzip: true }));

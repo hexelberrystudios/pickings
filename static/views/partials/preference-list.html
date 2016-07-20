@@ -1,0 +1,8 @@
+<% for (var i = 0; i < preferences.length; i++) { %>
+<div>
+  <label for="<%= preferences[i].name %>">
+    <input id="<%= preferences[i].name %>" type="checkbox"/>
+    <%= preferences[i].name %>
+  </label>
+</div>
+<% } %>

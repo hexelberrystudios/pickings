@@ -5,6 +5,38 @@ import koaRoute from 'koa-route';
 import routes from '../shared/routes';
 
 export default function (app) {
+  app.use(koaRoute.get('/table-wizard', function *(next) {
+    // started the wizard; make a table for the user to add their guests on
+    // table should expire in two weeks if wizard left unfinished
+    this.session.tableId = 1;
+    yield this.render('partials/table', {
+      guests: [{
+        id: 1,
+        name: 'Joe'
+      }, {
+        id: 2,
+        name: 'Yorda'
+      }],
+      tableId: this.session.tableId
+    });
+  }));
+
+  app.use(koaRoute.get('/add-guest', function *(next) {
+    yield this.render('partials/add-guest', {
+      preferences: [{
+        id: 1,
+        name: 'Meat'
+      }, {
+        id: 2,
+        name: 'Gluten'
+      }, {
+        id: 3,
+        name: 'Dairy'
+      }],
+      tableId: this.session.tableId
+    });
+  }));
+
   app.use(koaRoute.get('/', function *(next) {
     let reactString;
 console.log(routes);
@@ -28,7 +60,8 @@ console.log(this.path);
       }
     });
 
-    yield this.render('layout', { markup: reactString });
+    //yield this.render('layout', { markup: reactString });
+    yield this.render('partials/home');
     yield next;
 
     //yield this.render('home', { username: 'Anderson' });
