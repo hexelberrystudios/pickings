@@ -1,27 +1,30 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { match, RouterContext } from 'react-router';
-import koaRoute from 'koa-route';
+import koaRoute from 'koa-router';
 import routes from '../shared/routes';
 
 export default function (app) {
-  app.use(koaRoute.get('/table-wizard', function *(next) {
+  let router = koaRoute();
+
+  router.get('/table-wizard', function *(next) {
     // started the wizard; make a table for the user to add their guests on
     // table should expire in two weeks if wizard left unfinished
-    this.session.tableId = 1;
-    yield this.render('partials/table', {
-      guests: [{
+    if (!this.session.table) {
+      this.session.table = {
         id: 1,
-        name: 'Joe'
-      }, {
-        id: 2,
-        name: 'Yorda'
-      }],
-      tableId: this.session.tableId
-    });
-  }));
+        guests: [],
+        guestCurrentId: 1
+      };
+    }
 
-  app.use(koaRoute.get('/add-guest', function *(next) {
+    yield this.render('partials/table', {
+      guests: this.session.table.guests,
+      tableId: this.session.table.id
+    });
+  });
+
+  router.get('/add-guest', function *(next) {
     yield this.render('partials/add-guest', {
       preferences: [{
         id: 1,
@@ -33,10 +36,31 @@ export default function (app) {
         id: 3,
         name: 'Dairy'
       }],
-      tableId: this.session.tableId
+      tableId: this.session.table.id
     });
-  }));
+  });
 
+  router.post('/guest', function *(next) {
+    debugger;
+    console.log(this.request.body);
+    this.session.table.guests.push({
+      id: this.session.table.guestCurrentId++,
+      name: this.request.body.guestName
+    });
+
+    this.redirect('/table-wizard');
+  });
+
+  router.get('/', function *(next) {
+    this.session.table = null;
+
+    yield this.render('partials/home');
+  });
+
+  app.use(router.routes());
+  app.use(router.allowedMethods());
+
+/*
   app.use(koaRoute.get('/', function *(next) {
     let reactString;
 console.log(routes);
@@ -61,9 +85,9 @@ console.log(this.path);
     });
 
     //yield this.render('layout', { markup: reactString });
-    yield this.render('partials/home');
     yield next;
 
     //yield this.render('home', { username: 'Anderson' });
   }));
+  */
 };
