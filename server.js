@@ -1,56 +1,48 @@
 'use strict';
 
-import koa from 'koa';
-import render from 'koa-ejs';
-import bodyParser from 'koa-bodyparser';
-import staticServe from 'koa-static';
-import flash from 'koa-flash';
-import session from 'koa-generic-session';
-import cookieSession from 'koa-session';
-import knex from 'knex';
-import MySqlStore from 'koa-mysql-session';
-import config from './config/default';
-import router from './app/router';
-import errorHandler from './app/errorHandler';
-
-let env = process.env;
-
 if (!process.env.SQL_HOST) {
-  env = require('./env');
+    var env = require('./env');
 }
 
-const sqlConfig = require('./sqlConfig');
+var sqlConfig = require('./sqlConfig');
+var express = require('express');
+var serveStatic = require('serve-static');
+var app = express();
+var bodyParser = require('body-parser');
+var routes = require('./app/routes');
+var flash = require('connect-flash');
+var session = require('express-session');
+var knex = require('knex')(sqlConfig);
+var KnexSessionStore = require('connect-session-knex')(session);
+var sessionStore = new KnexSessionStore({ tablename: 'sessions', knex: knex });
+// refer to https://github.com/expressjs/session for documentation
+var sessionConfig = {
+    resave: true,
+    saveUninitialized: false,
+    secret: 'gravelervoltorbmewtwocharmander',
+    store: sessionStore,
+    cookie: { 
+        secure: false,
+        expires: 3600000 * 24 * 12
+    }
+};
 
-const app = module.exports = koa();
+if (app.get('env') === 'production') {
+    app.set('trust proxy', 1); // trust first proxy
+    // requires HTTPS
+    sessionConfig.cookie.secure = true; // serve secure cookies
+}
 
-// Setting up react requirements
-require('node-jsx').install({harmony: true, extension: 'jsx'});
-
-const knexConnection = require('knex')(sqlConfig);
-
-// https://github.com/koajs/ejs
-render(app, {
-  root: config.template.path,
-  layout: 'layout', // global layout file .html; can be disabled by setting to false
-  viewExt: 'html', // file extension to look for
-  cache: false, // cache compiled templates?
-  debug: true
-});
-
-app.keys = [config.session.secretKey];
-app.use(bodyParser());
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+app.use(session(sessionConfig));
 app.use(flash());
-app.use(cookieSession(app));
-app.use(session({
-  store: new MySqlStore(sqlConfig.connection),
-  rolling: true,
-  cookie: {
-    maxage: 86400000, // one day
-    secure: false, // set to true to only serve over https
-    signed: false // set to true to detect tampering
-  }
-}));
-router(app);
-errorHandler(app);
-app.use(staticServe('static', { gzip: true }));
+app.set('view engine', 'ejs');
+app.set('views', './static/views');
+// init api routes
+routes(app);
+
+app.use(serveStatic('static'));
+// var multer = require('multer');
+// app.use(multer()); // for parsing multipart/form-data (uploading files)
 app.listen(3000);

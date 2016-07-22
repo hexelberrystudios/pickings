@@ -1,0 +1,7 @@
+<% include header.ejs %>
+<form action="/guest" method="post">
+  <% include guest.ejs %>
+  <input type="hidden" name="tableId" value="<%= tableId %>" />
+  <button type="submit">Save</button>
+</form>
+<% include footer.ejs %>
