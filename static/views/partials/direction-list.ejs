@@ -1,0 +1,7 @@
+<ul style="list-style-type: decimal">
+<% if (typeof(recipe) !== 'undefined' && typeof(recipe.directions) !== 'undefined') { %>
+  <% recipe.directions.map(function (direction) { %>
+    <% include direction.ejs %>
+  <% }) %>
+<% } %>
+</ul>

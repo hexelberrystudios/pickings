@@ -1,0 +1,7 @@
+<ul>
+<% if (typeof(recipe) !== 'undefined' && typeof(recipe.ingredients) !== 'undefined') { %>
+  <% recipe.ingredients.map(function (ingredient) { %>
+    <% include ingredient.ejs %>
+  <% }) %>
+<% } %>
+</ul>

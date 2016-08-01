@@ -21,6 +21,7 @@
     "serve-static": "*"
   },
   "devDependencies": {
+    "nodemon": "^1.10.0",
     "sass": "^0.5.0"
   }
 }

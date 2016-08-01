@@ -1,7 +1,13 @@
-<% include header.ejs %>
-<form action="/guest" method="post">
-  <% include guest.ejs %>
-  <input type="hidden" name="tableId" value="<%= tableId %>" />
-  <button type="submit">Save</button>
-</form>
-<% include footer.ejs %>
+<div>
+  <div>
+    <% if (typeof(guest) !== 'undefined') { %>
+      <input type="text" name="guestName" value="<%= guest.name %>" required />
+    <% } else { %>
+      <input type="text" name="guestName" required />
+    <% } %>
+    <span>does not eat</span>
+    <% include preference-autocomplete.ejs %>
+    <button type="button">Add Preference</button>
+  </div>
+  <% include preference-list.ejs %>
+</div>

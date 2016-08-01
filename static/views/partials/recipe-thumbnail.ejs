@@ -1,0 +1,8 @@
+<a href="/recipe/<%= recipe.id %>" class="card">
+  <span>
+    <% if (recipe.thumbnail) { %>
+      <img src="<%= recipe.thumbnail %>" />
+    <% } %>
+  </span>
+  <span><%= recipe.name %></span>
+</a>

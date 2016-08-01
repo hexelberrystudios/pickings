@@ -1,0 +1,16 @@
+<% // template needs idx for ingredient, stepNumber for direction %>
+<% // directions, and ingredients %>
+<form action="/recipe" method="post">
+  <!-- recipe image thumbnail -->
+  <h2>Name</h2>
+  <p><%= recipe.name %></p>
+  <h2>Ingredients</h2>
+  <% include ingredient-list.ejs %>
+  <a href="/add-ingredient">Add Ingredient</a>
+  <h2>Directions</h2>
+  <% include direction-list.ejs %>
+  <a href="/add-direction">Add Direction</a>
+  <div>
+    <button type="submit">Save</button>
+  </div>
+</form>
